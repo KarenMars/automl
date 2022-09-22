@@ -21,6 +21,8 @@
 
 ## 基本原理
 
+![nas overview](../Images/nas_overview.png)
+
 神经网络架构搜索是在**定义的搜索空间**，**利用一定的优化方法**，搜索到特定的网络结构，基于此结构的模型可以在目标任务中取得良好的表现。神经网络搜索的基本流程包括定义搜索空间（search space），基于搜索空间的结构优化（architecture optimization），以及模型评估（model evaluation）。
 
 ![NAS pipeline](../Images/NAS.png)
@@ -70,9 +72,9 @@ $N_k$代表节点的入度，$I_i$代表输入张量，$o_i$代表待选运算�
 #### 进化算法
 ![nas evolve](../Images/NAS_evolve.png)
 进化算法借鉴了生物领域的进化过程，其主要利用以下步骤，基于定义的搜索空间，搜索最佳神经网络结构：
-1. selection：从定义搜索空间或经过进化算法生成的网络空间中选择较好的网络结果，以用于下一步。进化算法的选择策略主要有以下三种，fitness selection，rank selection，tournament selection；
+1. selection：从定义搜索空间或经过进化算法生成的网络空间中选择较好的网络结构，以用于下一步。进化算法的选择策略主要有以下三种，fitness selection，rank selection，tournament selection；
 2. crossover: 从上一步保存下来网络结构集合中，任选两个网络生成子网络，生成的子网络分别继承父母网络的一半结构；
-3. mutation：对上一步生成的自网络进行突变，比如去掉某两个节点的skip connections；
+3. mutation：对上一步生成的子网络进行突变，比如去掉某两个节点的skip connections；
 4. update：基于新生成的网络更新搜索空间。
 
 #### 强化学习
@@ -95,7 +97,7 @@ $N_k$代表节点的入度，$I_i$代表输入张量，$o_i$代表待选运算�
 
 通过以上操作，将神经网络架构的搜索转换为了学习连续变量$\alpha$的参数，$\alpha$可称为网络架构的编码。
 
-同时，在优化学习过程中，通过双层优化联合学习网络架构编码$\alpha$与权重参数$\omega$。相比于基于进化算法与强化学习在验证集上计算fitness与reward作为反馈，DARTS直接利用梯度下降，在验证机上进行优化，则该过程建模为一个双层优化问题，如下所示，
+同时，在优化学习过程中，通过双层优化联合学习网络架构编码$\alpha$与权重参数$\omega$。相比于基于进化算法与强化学习在验证集上计算fitness与reward作为反馈，DARTS直接利用梯度下降，在验证集上进行优化，则该过程建模为一个双层优化问题，如下所示，
 
 ```math
 \text{min}_{\alpha} L_{val}(\omega^*(\alpha),\alpha)
@@ -109,6 +111,7 @@ s.t~w^*(\alpha)=\text{argmin}_\omega L_{train}(\omega, \alpha)
 \frac{exp(\alpha_o^{i,j})}{\sum_{o^{\prime}\in{O}}exp(\alpha_{o^{\prime}}^{i,j})}o(x)
 ```
 
+![NAS time](../Images/nas_time.png)
 
 
 ### 主流神经网络框架搜索算法介绍
@@ -118,12 +121,5 @@ s.t~w^*(\alpha)=\text{argmin}_\omega L_{train}(\omega, \alpha)
 
 ### 参考资料
 - [Retiarii：微软在NAS框架上的新动作，已被顶会OSDI2020接收](https://www.cnblogs.com/marsggbo/p/14766511.html) (偏工程化)
-- [医疗场景下的 AutoML ，模型参数量更小、分类准确率更高](https://www.leiphone.com/category/ai/YvVETdpX0yJ2VvqY.html) (AutoML 应用)
-
-
-
-
-
-
-
+- [医疗场景下的 AutoML ，模型参数量更小、分类准确率更高](https://www.leiphone.com/category/ai/YvVETdpX0yJ2VvqY.html) (AutoML 应用) 
 

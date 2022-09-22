@@ -22,16 +22,17 @@
 
 Ensemble selection是一种基于**贪心学习**的集成学习方法，其具体步骤如下：
 1. 初始化一个空的ensemble；
-2. 根据设定的评价指标，将在验证集（validation set或hillclimb）上评价指标最优的模型加入到ensemble中；
+2. 从待选择模型中，选择模型加入得到ensemble中，使得ensemble基于验证集（validation set或hillclimb）的评价指标最优；
 3. 重复步骤2，直到到达设定的迭代次数，或所有模型均被使用；
 4. 返回在验证集上基于目标评价指标上最优的ensemble。
-Ensemble selection在加入模型时，模型的权重为1，在添加模型时，允许重复。
+
+（Ensemble selection在加入模型时，模型的权重为1，在添加模型时，允许重复。）
 
 ### Stacking (Super learner)
 Stacking (或者Super learner)是基于交叉验证的方法集成多个模型，具体步骤如下：
 定义待选模型库为$L$，模型库中包含模型的数量为$K(n)$，
 1. 在完整的数据集上训练模型库中的每一个模型，数据集$X={X_i:i=1,...n}$, 模型$k$, $k=1,...,K(n)$；
-2. （基于交叉验证分割训练集与测试集） 将完成数据集平均分为$V$份，设置第$v$组数据为验证集，$v=1,...V$，剩余数据为训练集；则$T(V)$为第$v$个训练数据集，$V(v)$为对应的验证集；
+2. （基于交叉验证分割训练集与测试集） 将完成数据集平均分为$V$份，设置第$v$组数据为验证集，$v=1,...V$，剩余数据为训练集；则$T(v)$为第$v$个训练数据集，$V(v)$为对应的验证集；
 3. 在以上$V$组训练集与验证集分别训练与验证各个模型，保存各个模型在对应验证集上的预测值，
 ```math
 \hat\Psi_{k,T(V)}(W_i), X_i \in V(v)~\text{for}~ v = 1, ... V 
@@ -48,6 +49,8 @@ m(z|\alpha) = \sum^K_{k=1}\alpha_k \hat\Psi_{k,T(v)}(W_V(v)), \alpha_k \geq 0, \
 ```math
 \hat{\alpha} = \text{arg}\min_{\alpha} \sum_{i=1}^{V}(Y_i - m(z_i|\alpha))^2
 ```
+
+对比以上两种方法，基于stacking的集成学习方法需要耗费较多的时间，通常选择基于ensemble selection的集成学习方法，在实际应用中，H20 automl机器学习框架使用了stacking的方法，auto-sklearn使用了ensemble selection的方法。
 
 
 ### 参考资料
